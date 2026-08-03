@@ -1,0 +1,727 @@
+*{
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent;
+}
+
+body{
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-sm);
+    line-height: 1.6; 
+} 
+/* home screen css */ 
+
+.screen {
+  width: 100%;
+  max-width: 420px;
+  min-height: 90vh;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-lg);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+} 
+
+.game-logo {
+  width: 140px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  box-shadow: var(--glow-red);
+  margin-top: var(--space-sm);
+  transition: transform 0.3s ease;
+}
+
+.game-logo:hover {
+  transform: scale(1.03);
+}
+
+/* Stylized Title matching the illustration style */
+.game-title {
+  font-size: var(--fs-display);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: 1px;
+  margin-top: var(--space-xs);
+  text-shadow: 0 4px 15px rgba(200, 29, 37, 0.5);
+  
+}
+
+/* ==========================================
+   GAME INFO & TEXT
+   ========================================== */
+.game-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: var(--space-sm) 0;
+}
+
+.game-subtitle {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.game-description {
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+.home-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: auto;
+  margin-bottom: var(--space-md);
+}
+
+.btn {
+  width: 100%;
+  padding: 0.9rem var(--space-md);
+  font-family: var(--font-main);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text);
+  box-shadow: var(--glow-red);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--cream);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:active {
+  background-color: var(--surface-hover);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+.home-footer { 
+  font-family: 'Times New Roman', Times, serif;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  display: flex;
+  gap: var(--space-xs);
+  opacity: 0.7;
+}
+
+.My-name {
+  font-style: normal;
+  color: var(--accent-gold);
+  font-weight: 400; 
+ 
+} 
+/* "How to play screen Css*/ 
+
+/* ==========================================
+   UTILITY CLASS FOR SCREEN SWITCHING
+   ========================================== */
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   MODAL OVERLAY (BACKGROUND BACKDROP)
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent dark blur */
+  backdrop-filter: blur(8px);           /* Glassmorphism background blur */
+  z-index: 1000;                        /* Sits on top of all screens */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-sm);
+}
+
+/* ==========================================
+   MODAL CARD CONTAINER
+   ========================================== */
+.modal-card {
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;                     /* Prevents overflow off screen */
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;                     /* Clips sticky header inside card */
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ==========================================
+   MODAL HEADER (STICKY AT TOP)
+   ========================================== */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: var(--fs-title);
+  color: var(--cream);
+  font-weight: 800;
+}
+
+.btn-close {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-full);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-close:active {
+  transform: scale(0.9);
+  background-color: var(--primary);
+}
+
+/* ==========================================
+   MODAL BODY (SCROLLABLE CONTENT)
+   ========================================== */
+.modal-body {
+  padding: var(--space-md);
+  overflow-y: auto;                      /* Allows vertical scrolling */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  text-align: right;                     /* Clean RTL alignment */
+  color: var(--text-muted);
+  font-size: var(--fs-body);
+}
+
+.modal-body h2 {
+  color: var(--cream);
+  font-size: 1.15rem;
+  margin-bottom: var(--space-xs);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border);
+  margin: var(--space-xs) 0;
+}
+
+/* RULES LIST & PRO-TIP STYLING */
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: var(--space-xs);
+}
+
+.rules-list li {
+  position: relative;
+  line-height: 1.5;
+}
+
+
+
+/* CUSTOM SCROLLBAR FOR MOBILE APP FEEL */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: var(--radius-full);
+}
+
+/* Align icon vertically with section headings */
+.modal-body h2,
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.modal-body h2 .material-symbols-rounded,
+.modal-title .material-symbols-rounded {
+  font-size: 1.4rem;
+  color: var(--primary); /* Gives header icons that sleek crimson red accent */
+}
+
+/* Icon colors inside list items */
+.icon-success {
+  color: #3DDC97; /* Green for success */
+  vertical-align: middle;
+}
+
+.icon-danger {
+  color: var(--primary); /* Red for imposter */
+  vertical-align: middle;
+}
+
+.icon-inline {
+  font-size: 1.1rem;
+  vertical-align: middle;
+  color: var(--cream);
+}
+
+/* ==========================================
+   SETUP SCREEN STYLING
+   ========================================== */
+
+.setup-header {
+  text-align: center;
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.setup-title {
+  font-family: var(--font-main);
+  font-size: var(--fs-title);
+  color: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.setup-title .material-symbols-rounded {
+  color: var(--primary);
+}
+
+/* Checkbox container for "Edit Players" mode */
+.keep-scores-container {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.custom-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+
+.custom-checkbox-label input[type="checkbox"] {
+  accent-color: var(--primary); /* Styles the checkbox native color */
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Players Form & Inputs Wrapper */
+.players-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  flex: 1;
+  justify-content: space-between;
+}
+
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 45vh; /* Makes the list scrollable if player count is high */
+  overflow-y: auto;
+  padding-left: 4px;
+}
+
+/* Single Input Row: Horizontal Layout */
+.player-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 0.4rem 0.4rem 1rem; /* Extra padding on right for input */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus glow effect when typing */
+.player-input-row:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 12px rgba(200, 29, 37, 0.25);
+}
+
+.player-name-input {
+  flex: 1; /* Takes up all available horizontal space */
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--cream);
+  font-family: var(--font-main);
+  font-size: var(--fs-body);
+}
+
+.player-name-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* Delete Trash Button */
+.btn-delete-player {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-player:hover {
+  background-color: rgba(200, 29, 37, 0.15);
+  color: var(--primary);
+}
+
+.btn-delete-player .material-symbols-rounded {
+  font-size: 1.2rem;
+}
+
+/* Setup Action Buttons Footer */
+.setup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: auto;
+}
+
+/* ==========================================
+   META-STYLE PASS THE PHONE SCREEN
+   ========================================== */
+
+#pass-phone-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: var(--space-md);
+}
+
+.pass-phone-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 360px;
+  gap: var(--space-lg);
+}
+
+/* Central Glowing Graphic Container */
+.spy-avatar-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ultra-subtle Meta purple glow */
+  box-shadow: 0 0 50px rgba(139, 92, 246, 0.18);
+  transition: transform 0.4s ease;
+}
+
+.spy-eyes-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  mix-blend-mode: lighten;
+  animation: eyeBreathing 4s infinite ease-in-out;
+}
+
+/* Subtle Breathing Keyframe */
+@keyframes eyeBreathing {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4));
+  }
+}
+
+/* Clean Typography Grouping */
+.pass-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.pass-title {
+  font-family: var(--font-main);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+}
+
+.player-turn-name {
+  color: #a78bfa; /* Modern Lavender */
+  font-weight: 700;
+}
+
+/* Quote integrated naturally into regular prose */
+.spy-quote {
+  font-family: var(--font-main);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  line-height: 1.6;
+  opacity: 0.8;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Action Container & Button */
+.pass-action {
+  width: 100%;
+  margin-top: var(--space-xs);
+}
+
+.btn-ready {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-family: var(--font-main);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  border-radius: var(--radius-full); /* Meta-style pill button */
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn-ready:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-ready .material-symbols-rounded {
+  font-size: 1.2rem;
+  transform: rotate(180deg); /* Flips arrow to point left for RTL layout */
+}
+
+/* ==========================================
+   META-STYLE REVEAL SCREEN (STATES A & B)
+   ========================================== */
+
+#reveal-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: var(--space-md);
+}
+
+.reveal-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 360px;
+  gap: var(--space-md);
+}
+
+/* Base Card Layout */
+.role-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-md);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(23, 25, 32, 0.9) 0%, rgba(13, 14, 18, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+/* Artwork Frame with Seamless Blend */
+.card-art-wrapper {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+  overflow: hidden;
+}
+
+.card-art-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: lighten; /* Removes any remaining dark borders */
+}
+
+/* --- STATE A: REGULAR PLAYER STYLES --- */
+.state-regular .card-art-wrapper {
+  box-shadow: 0 0 30px rgba(200, 29, 37, 0.25);
+}
+
+.card-label {
+  font-family: var(--font-main);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+}
+
+.secret-word-display {
+  font-family: var(--font-main);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  margin-bottom: var(--space-sm);
+}
+
+/* --- STATE B: IMPOSTER STYLES --- */
+.state-spy {
+  border-color: rgba(200, 29, 37, 0.3);
+  background: linear-gradient(180deg, rgba(30, 15, 20, 0.9) 0%, rgba(13, 14, 18, 0.95) 100%);
+}
+
+.state-spy .card-art-wrapper {
+  box-shadow: 0 0 35px rgba(200, 29, 37, 0.4);
+}
+
+.spy-warning-tag {
+  display: inline-block;
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(200, 29, 37, 0.15);
+  border: 1px solid rgba(200, 29, 37, 0.3);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-xs);
+}
+
+.spy-title-display {
+  font-family: var(--font-main);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-shadow: 0 0 16px rgba(200, 29, 37, 0.5);
+  margin-bottom: var(--space-sm);
+}
+
+/* Seamless Quote Microcopy */
+.role-quote {
+  font-family: var(--font-main);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 280px;
+  opacity: 0.85;
+}
+
+/* Action Button */
+.btn-done-turn {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-family: var(--font-main);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--cream);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.btn-done-turn:active {
+  transform: scale(0.98);
+  background: var(--bg);
+}

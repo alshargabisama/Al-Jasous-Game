@@ -1,0 +1,352 @@
+<!DOCTYPE html> 
+<html lang = "ar" dir="rtl"> 
+
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> لعبة الجاسوس </title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+   
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<!-- Google Material Symbols (Icons) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+<link rel="stylesheet" href="variable.css">
+<link rel="stylesheet" href="index.css"> 
+</head>
+
+    <body> 
+
+<!-- the  home screen --> 
+
+<section class="home screen" id="home-screen">
+
+    <img src="main logo cover.jpg" alt="logo" class="game-logo"> 
+    
+    <h1 class="game-title"> الجاسوس </h1>
+
+<div class="game-info"> 
+     <p class="game-subtitle">
+           لعبة اجتماعية للخداع، الذكاء، وكشف الحقيقة.
+            </p>
+
+            <p class="game-description">
+                اكتشف الجاسوس...
+                أو كن أنت من يخدع الجميع.
+            </p>
+</div>
+
+<div class="home-buttons"> 
+     <button class="btn btn-primary">
+                ابدأ اللعبة
+            </button>
+
+            <button class="btn btn-secondary">
+                كيف تلعب؟
+            </button>
+</div>
+<footer class="home-footer"> 
+    <p class="copyright">  copyright - <span class="My-name">  Samaa AlShargabi </span></p>
+    <p class="made-year">  © 2026</p>
+</footer>
+</section> 
+<!-- The end of screen 0-->
+
+<!-- HOW TO PLAY MODAL OVERLAY -->
+ 
+<div class="modal-overlay hidden" id="rules-modal">
+  <div class="modal-card">
+    
+    <!-- Modal Sticky Header with Close Button -->
+    <header class="modal-header">
+      <h1 class="modal-title">
+        <span class="material-symbols-rounded">person_search</span> كيف تلعب؟
+      </h1>
+      <button class="btn-close" id="close-rules-btn" aria-label="إغلاق">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </header>
+
+    <!-- Scrollable Modal Body -->
+    <div class="modal-body">
+      
+      <div class="how-to-play">
+        <p>
+          مرحبًا بك في <strong>لعبة الجاسوس</strong>!
+          لعبة اجتماعية تعتمد على الذكاء، الملاحظة، والخداع.
+          في كل جولة يوجد جاسوس واحد فقط... والسؤال هو:
+          <strong>هل ستكتشفونه قبل أن يخدعكم؟</strong>
+        </p>
+      </div> 
+
+      <hr class="divider">
+
+      <div class="game-goal"> 
+        <h2><span class="material-symbols-rounded">target</span> هدف اللعبة</h2>
+        <p>
+          يحصل جميع اللاعبين على نفس الكلمة السرية، بينما يحصل لاعب واحد
+          فقط على دور <strong>الجاسوس</strong> دون معرفة الكلمة.
+          يحاول اللاعبون كشف الجاسوس، بينما يحاول الجاسوس إخفاء هويته
+          ومعرفة الكلمة من خلال التلميحات.
+        </p>
+      </div> 
+
+      <hr class="divider">
+
+      <div class="players-count"> 
+        <h2><span class="material-symbols-rounded">group</span> عدد اللاعبين</h2>
+        <p>• الحد الأدنى: <strong>3 لاعبين</strong></p>
+        <p>• الحد الأقصى: <strong>15 لاعبًا</strong></p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="word-count"> 
+        <h2><span class="material-symbols-rounded">casino</span> الكلمات</h2>
+        <p>
+          تحتوي اللعبة على مجموعة كبيرة من الكلمات المتنوعة.
+          يتم اختيار كلمة عشوائيًا في كل جولة، وتتنوع بين السهلة،
+          والمتوسطة، والصعبة.
+        </p>
+        <p>لن تتكرر نفس الكلمة حتى يتم استخدام جميع الكلمات مرة واحدة.</p>
+      </div> 
+
+      <hr class="divider">
+
+      <div class="hints-round"> 
+        <h2><span class="material-symbols-rounded">forum</span> جولة التلميحات</h2>
+        <p>
+          بعد معرفة دور كل لاعب، تبدأ جولتان من التلميحات.
+          في كل جولة يقول كل لاعب كلمة أو عبارة قصيرة تصف الكلمة
+          دون ذكرها بشكل مباشر.
+        </p>
+      </div>  
+
+      <hr class="divider">
+
+      <div class="hints-rules"> 
+        <h2><span class="material-symbols-rounded">push_pin</span> قواعد التلميحات</h2>
+        <ul class="rules-list">
+          <li>لا تذكر الكلمة أو أي جزء منها.</li>
+          <li>لا تعطِ تلميحًا واضحًا جدًا حتى لا تساعد الجاسوس.</li>
+          <li>لا تجعل التلميح غامضًا جدًا حتى لا يشك بك اللاعبون.</li>
+          <li>قل تلميحًا واحدًا فقط في كل جولة.</li>
+          <li>لا تنظر إلى شاشة أي لاعب آخر.</li>
+          <li>مرّر الهاتف مباشرة بعد انتهاء دورك.</li>
+        </ul>
+      </div> 
+
+      <hr class="divider">
+
+      <div class="voting-modal"> 
+        <h2><span class="material-symbols-rounded">how_to_vote</span> التصويت</h2>
+        <p>
+          بعد انتهاء جولتي التلميحات، يصوّت كل لاعب سرًا للشخص الذي
+          يعتقد أنه الجاسوس.
+        </p>
+        <p>اللاعب الحاصل على أكبر عدد من الأصوات يعتبر المتهم الرئيسي.</p>
+      </div>
+
+      <hr class="divider">
+
+      <div class="points-rules"> 
+        <h2><span class="material-symbols-rounded">emoji_events</span> احتساب النقاط</h2>
+        <ul class="rules-list">
+          <li>
+            <span class="material-symbols-rounded icon-success">check_circle</span> 
+            إذا تم اكتشاف الجاسوس، يحصل كل لاعب صوّت له على <strong>+1 نقطة</strong>.
+          </li>
+          <li>
+            <span class="material-symbols-rounded icon-danger">masks</span> 
+            إذا نجا الجاسوس من التصويت، يحصل هو على <strong>+2 نقطتين</strong>.
+          </li>
+        </ul>
+      </div>   
+
+      <hr class="divider">
+
+      <div class="last-round"> 
+        <h2><span class="material-symbols-rounded">celebration</span> نهاية الجولة</h2>
+        <p>بعد التصويت سيتم الكشف عن:</p>
+        <ul class="rules-list">
+          <li><span class="material-symbols-rounded icon-inline">search</span> الكلمة السرية.</li>
+          <li><span class="material-symbols-rounded icon-inline">visibility_off</span> هوية الجاسوس.</li>
+          <li><span class="material-symbols-rounded icon-inline">leaderboard</span> لوحة النقاط المحدثة.</li>
+        </ul>
+      </div> 
+
+      <hr class="divider">
+    </div>
+  </div>
+</div>
+
+<!-- Set up Screen -->
+<!-- SCREEN 1: SETUP SCREEN -->
+<section class="screen hidden" id="setup-screen">
+  
+  <header class="setup-header">
+    <h1 class="setup-title">
+      <span class="material-symbols-rounded">settings</span> إعداد اللاعبين
+    </h1>
+  </header>
+
+  <!-- Optional Checkbox Container (Hidden by default, shown only during "Edit Players") -->
+  <div class="keep-scores-container hidden" id="keep-scores-box">
+    <label class="custom-checkbox-label">
+      <input type="checkbox" id="keep-scores-checkbox" checked />
+      <span class="checkbox-custom"></span>
+      <span class="checkbox-text">الاحتفاظ بنقاط اللاعبين الحالية</span>
+    </label>
+  </div>
+
+  <!-- Player Inputs Container -->
+  <div class="players-form">
+    
+    <!-- Dynamic List of Player Input Rows -->
+    <div class="players-list" id="players-list">
+      
+      <!-- Default Player Row 1 -->
+      <div class="player-input-row">
+        <input type="text" class="player-name-input" placeholder="اسم اللاعب 1" required />
+        <button type="button" class="btn-delete-player" aria-label="حذف اللاعب">
+          <span class="material-symbols-rounded">delete</span>
+        </button>
+      </div>
+
+      <!-- Default Player Row 2 -->
+      <div class="player-input-row">
+        <input type="text" class="player-name-input" placeholder="اسم اللاعب 2" required />
+        <button type="button" class="btn-delete-player" aria-label="حذف اللاعب">
+          <span class="material-symbols-rounded">delete</span>
+        </button>
+      </div>
+
+      <!-- Default Player Row 3 -->
+      <div class="player-input-row">
+        <input type="text" class="player-name-input" placeholder="اسم اللاعب 3" required />
+        <button type="button" class="btn-delete-player" aria-label="حذف اللاعب">
+          <span class="material-symbols-rounded">delete</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="setup-actions">
+      <button type="button" class="btn btn-secondary btn-add-player" id="add-player-btn">
+        <span class="material-symbols-rounded">add</span> أضف لاعب
+      </button>
+
+      <button type="button" class="btn btn-primary btn-start-game" id="start-game-btn">
+        يلا نبدأ اللعب 
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- SCREEN 2: PASS THE PHONE SCREEN -->
+<section class="screen hidden" id="pass-phone-screen">
+  
+  <div class="pass-phone-wrapper">
+    
+    <!-- Minimalist Artwork Frame -->
+    <div class="spy-avatar-container">
+      <img src="purple-eyes.jpg" alt="الجاسوس" class="spy-eyes-img">
+    </div>
+
+    <!-- Title & Subtitle Group -->
+    <div class="pass-content">
+      <h1 class="pass-title">
+        مرر الهاتف إلى <span class="player-turn-name" id="current-player-name">سماء</span>
+      </h1>
+      
+      <!-- Seamlessly Integrated Quote -->
+      <p class="spy-quote">
+        الأعين كثيرة وتترقب... تأكد أن لا أحد ينظر إلى الشاشة سواك.
+      </p>
+    </div>
+
+    <!-- Action Button -->
+    <div class="pass-action">
+      <button type="button" class="btn btn-primary btn-ready" id="ready-btn">
+        <span>أنا جاهز</span>
+        <span class="material-symbols-rounded">arrow_forward</span>
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- SCREEN 3: REVEAL ROLE / WORD SCREEN -->
+<section class="screen hidden" id="reveal-screen">
+  
+  <div class="reveal-card-container">
+    
+    <!-- ==========================================
+         STATE A: REGULAR PLAYER (HAS SECRET WORD)
+         ========================================== -->
+    <div class="role-card state-regular" id="card-regular">
+      
+      <!-- Hush Artwork -->
+      <div class="card-art-wrapper">
+        <img src="hush-word.jpg" alt="سرية" class="card-art-img hush-art">
+      </div>
+
+      <span class="card-label">الكلمة السرية</span>
+      
+      <!-- Dynamic Secret Word -->
+      <h2 class="secret-word-display" id="secret-word-text">بيتزا</h2>
+
+      <!-- Integrated Atmospheric Quote -->
+      <p class="role-quote">
+        احتفظ بالكلمة لنفسك... أعطِ تلميحًا ذكيًا دون أن تذكرها صراحة.
+      </p>
+
+    </div>
+
+    <!-- ==========================================
+         STATE B: IMPOSTER / SPY (NO WORD)
+         ========================================== -->
+    <div class="role-card state-spy hidden" id="card-spy">
+      
+      <!-- Noir Detective Artwork -->
+      <div class="card-art-wrapper">
+        <img src="joker-image.jpg" alt="الجاسوس" class="card-art-img spy-art">
+      </div>
+
+      <span class="spy-warning-tag">تحذير</span>
+      
+      <h2 class="spy-title-display">أنت الجاسوس!</h2>
+
+      <!-- Integrated Atmospheric Quote -->
+      <p class="role-quote spy-quote-text">
+        لا أحد يعلم هويتك... استمع جيدًا لتلميحات الآخرين واستنتج الكلمة دون أن تتكشف.
+      </p>
+
+    </div>
+
+    <!-- Action Button to finish turn -->
+    <button type="button" class="btn btn-primary btn-done-turn" id="done-turn-btn">
+      <span>فهمت، اخفِ الشاشة</span>
+      <span class="material-symbols-rounded">visibility_off</span>
+    </button>
+
+  </div>
+
+</section> 
+
+<!-- EXTERNAL JAVASCRIPT LINK -->
+<script src="index.js" defer></script>
+
+ 
+    </body>
+</html>
+

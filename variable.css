@@ -1,0 +1,42 @@
+:root {
+  /* COLORS - Extracted directly from the logo illustration */
+  --bg: #0D0E12;          /* Deep noir black/charcoal */
+  --surface: #171920;     /* Elevated dark card surface */
+  --surface-hover: #222530;
+
+  --primary: #C81D25;     /* Crimson Red from the background top */
+  --primary-hover: #E6222C;
+  --secondary: #3B286D;   /* Dark Indigo/Purple from coat lapels */
+
+  --accent-gold: #FFC857;  /* Gold highlight for badges/winners */
+  --cream: #F5F2E9;        /* Cream white from the suit shirt */
+  
+  --text: #F5F2E9;         /* High legibility off-white */
+  --text-muted: #9E9EA8;   /* Soft gray for descriptions */
+
+  --border: rgba(255, 255, 255, 0.1);
+  --border-focus: #C81D25;
+
+  /* TYPOGRAPHY */
+  --font-main:  'IBM Plex Sans Arabic', 'Alexandria', sans-serif;
+
+  /* FONT SIZES */
+  --fs-display: clamp(2.4rem, 6vw, 3.8rem);
+  --fs-title: 1.5rem;
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+
+  /* SHADOWS & GLOWS */
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+  --glow-red: 0 0 25px rgba(200, 29, 37, 0.4);
+
+  /* RADIUS & SPACING */
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-full: 9999px;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+}
