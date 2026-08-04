@@ -255,7 +255,7 @@
   
   <div class="pass-phone-wrapper">
     
-    <!-- Minimalist Artwork Frame -->
+    
     <div class="spy-avatar-container">
       <img src="purple-eyes.jpg" alt="الجاسوس" class="spy-eyes-img">
     </div>
@@ -342,6 +342,347 @@
   </div>
 
 </section> 
+<!-- SCREEN 4: ROUND INITIALIZATION SCREEN -->
+<section class="screen hidden" id="round-initialization-screen"> 
+  
+  <div class="round-init-wrapper">
+    
+    <!-- Central Spy Artwork / Avatar Container -->
+    <div class="spy-avatar-container">
+      <img src="round-image.jpg" alt="بداية الجولة" class="round-circles-img">
+    </div>
+
+    <!-- Title & Dynamic Description Grouping -->
+    <div class="round-init-content">
+      <h1 class="round-init-title">بدأت مرحلة الخداع والتلميح</h1>
+      <p class="round-init-desc">
+        كل لاعب يعطي تلميحًا ذكيًا بكلمة واحدة فقط. لا تجعلها واضحة جدًا فيستغلها الجاسوس، ولا مبهمة فيشك فيك الجميع!
+      </p>
+    </div> 
+
+    <!-- Action Button -->
+    <div class="round-init-action">
+      <button type="button" class="btn btn-primary btn-ready" id="round-start-btn">
+        <span>ابدأ التلميحات</span>
+        <span class="material-symbols-rounded">play_arrow</span>
+      </button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SCREEN 5: ACTIVE CLUE TURN SCREEN -->
+<section class="screen hidden" id="clue-turn-screen">
+  
+  <div class="clue-turn-wrapper">
+    
+    <!-- Top Round Indicator Badge -->
+    <div class="round-badge">
+      <span class="material-symbols-rounded badge-icon">repeat</span>
+      <span>الجولة <span id="current-round-num">1</span> من <span id="total-rounds-num">2</span></span>
+    </div>
+
+    <!-- Active Player Focus Area (Glass Card Surface) -->
+    <div class="player-turn-card">
+      
+      <!-- Speaker Icon Frame with Crimson Ambient Glow -->
+      <div class="turn-avatar-icon">
+        <span class="material-symbols-rounded">record_voice_over</span>
+      </div>
+      
+      <h1 class="active-player-name" id="active-player-name">سارة</h1>
+      
+      <p class="turn-instruction">
+        قل تلميحاً يصف الكلمة دون ذكرها مباشرة.
+      </p>
+
+    </div>
+
+    <!-- Main Action Button -->
+    <div class="turn-action">
+      <button type="button" class="btn btn-primary btn-next-turn" id="next-turn-btn">
+        <span>التالي</span>
+        <span class="material-symbols-rounded">arrow_forward</span>
+      </button>
+    </div>
+
+    <!-- Bottom Progress Tracker -->
+    <div class="players-progress">
+      <span class="material-symbols-rounded progress-icon">group</span>
+      <span>لاعبين <span id="clue-player-count">3 / 8</span></span>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SCREEN 6: VOTING INITIALIZATION SCREEN -->
+<section class="screen hidden" id="voting-initialization-screen"> 
+  
+  <div class="round-init-wrapper">
+    
+    <!-- Spy Voting Artwork Frame -->
+    <div class="spy-avatar-container">
+      <img src="voting-image.png" alt="بداية التصويت" class="round-circles-img">
+    </div>
+
+    <!-- Title & Instruction Content -->
+    <div class="round-init-content">
+      <h1 class="round-init-title">مرحلة الاتهام والتصويت</h1>
+      <p class="round-init-desc">
+        حان وقت كشف الأوراق! تناقشوا بحذر، حددوا المشتبه به الأول، واستعدوا لاختيار الجاسوس بكل حسم.
+      </p>
+    </div> 
+
+    <!-- Action Button -->
+    <div class="round-init-action">
+      <button type="button" class="btn btn-primary btn-ready" id="start-voting-btn">
+        <span>ابدأ التصويت</span>
+        <span class="material-symbols-rounded">how_to_vote</span>
+      </button>
+    </div>
+
+  </div>
+
+</section>
+<!-- SCREEN 7: VOTING TURN SCREEN -->
+<section class="screen hidden" id="voting-screen">
+
+  <div class="voting-wrapper">
+
+    <!-- Glassmorphism Main Card -->
+    <div class="voting-card">
+
+      <!-- Dynamic Question Heading -->
+      <h2 class="voting-title">
+        من تعتقد أنه الجاسوس يا <span id="voter-name" class="voter-highlight">علي</span>؟
+      </h2>
+
+      <!-- Dynamic Player Selection Grid (Supports 2-14 items) -->
+      <div class="voting-grid" id="voting-grid">
+        
+        <!-- Example Cards (Generated dynamically via JS later) -->
+        <button type="button" class="vote-option-btn">
+          <span class="material-symbols-rounded vote-icon">person</span>
+          <span class="player-name">سارة</span>
+        </button>
+
+        <button type="button" class="vote-option-btn">
+          <span class="material-symbols-rounded vote-icon">person</span>
+          <span class="player-name">أحمد</span>
+        </button>
+
+        <button type="button" class="vote-option-btn selected">
+          <span class="material-symbols-rounded vote-icon">person</span>
+          <span class="player-name">نور</span>
+        </button>
+
+      </div>
+
+      <!-- Action Area: Submit/Next Player Button -->
+      <div class="voting-action">
+        <button type="button" class="btn btn-primary btn-next-vote" id="submit-vote-btn">
+          <span>التالي</span>
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </button>
+      </div>
+
+      <!-- Helper Notice Text -->
+      <p class="voting-notice">
+        سيتم حفظ صوتك مباشرة بعد التأكيد.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SCREEN 8: SESSION RESULT SCREEN -->
+<section class="screen hidden" id="result-screen">
+  
+  <div class="result-wrapper">
+    
+    <!-- Top Bar Navigation (Exit/End to Leaderboard) -->
+    <div class="result-top-bar">
+      <button type="button" class="btn-icon-close" id="to-leaderboard-btn" title="إنهاء إلى قائمة الأوائل">
+        <span class="material-symbols-rounded">close</span>
+      </button>
+    </div>
+
+    <!-- Main Results Glass Card -->
+    <div class="result-card">
+      
+      <!-- Winner Banner/Badge -->
+      <div class="winner-badge status-team-win" id="winner-badge">
+        <span class="material-symbols-rounded badge-icon">emoji_events</span>
+        <span id="winner-title-text">فوز الفريق!</span>
+      </div>
+
+      <!-- Secret Reveals Section -->
+      <div class="reveals-container">
+        <!-- Secret Word -->
+        <div class="reveal-box">
+          <span class="reveal-label">الكلمة السرية</span>
+          <span class="reveal-value" id="result-secret-word">بيتزا</span>
+        </div>
+
+        <!-- Imposter Identity -->
+        <div class="reveal-box imposter-box">
+          <span class="reveal-label">الجاسوس</span>
+          <span class="reveal-value" id="result-imposter-name">أحمد</span>
+        </div>
+      </div>
+
+      <!-- Session Scores Table -->
+      <div class="score-table-container">
+        <h3 class="table-title">نتائج الجولة</h3>
+        <table class="scores-table">
+          <thead>
+            <tr>
+              <th>اللاعب</th>
+              <th>الجولة</th>
+              <th>المجموع</th>
+            </tr>
+          </thead>
+          <tbody id="scores-table-body">
+            <tr>
+              <td>
+                <div class="player-cell">
+                  <span class="material-symbols-rounded">person</span>
+                  <span>سارة</span>
+                </div>
+              </td>
+              <td class="session-score">+100</td>
+              <td class="total-score">350</td>
+            </tr>
+            <tr class="highlight-imposter">
+              <td>
+                <div class="player-cell">
+                  <span class="material-symbols-rounded">visibility_off</span>
+                  <span>أحمد</span>
+                </div>
+              </td>
+              <td class="session-score">+0</td>
+              <td class="total-score">120</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="player-cell">
+                  <span class="material-symbols-rounded">person</span>
+                  <span>نور</span>
+                </div>
+              </td>
+              <td class="session-score">+100</td>
+              <td class="total-score">290</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Action Buttons Area -->
+      <div class="result-actions">
+        <button type="button" class="btn btn-primary btn-replay" id="replay-btn">
+          <span>بدء جولة جديدة</span>
+          <span class="material-symbols-rounded">replay</span>
+        </button>
+
+        <button type="button" class="btn-link-edit" id="edit-players-btn">
+          تعديل اللاعبين
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SCREEN 9: LEADERBOARD SCREEN -->
+<section class="screen hidden" id="leaderboard-screen">
+  
+  <div class="leaderboard-wrapper">
+
+    <!-- Header & Exit Navigation -->
+    <div class="leaderboard-header">
+      <h1 class="leaderboard-title">لوحة الصدارة</h1>
+      <button type="button" class="btn-icon-close" id="lb-home-btn" title="الرئيسية">
+        <span class="material-symbols-rounded">home</span>
+      </button>
+    </div>
+
+    <!-- Main Glass Container -->
+    <div class="leaderboard-card">
+
+      <!-- Top 3 Winners Podium -->
+      <div class="podium-container">
+        
+        <!-- Rank 2: Silver -->
+        <div class="podium-place rank-2">
+          <div class="podium-avatar">
+            <span class="material-symbols-rounded">military_tech</span>
+          </div>
+          <span class="podium-name">سارة</span>
+          <span class="podium-score">350</span>
+          <span class="podium-rank-tag">#2</span>
+        </div>
+
+        <!-- Rank 1: Gold Winner -->
+        <div class="podium-place rank-1">
+          <div class="crown-icon">
+            <span class="material-symbols-rounded">crown</span>
+          </div>
+          <div class="podium-avatar winner-gold">
+            <span class="material-symbols-rounded">workspace_premium</span>
+          </div>
+          <span class="podium-name">نور</span>
+          <span class="podium-score">520</span>
+          <span class="podium-rank-tag">#1</span>
+        </div>
+
+        <!-- Rank 3: Bronze -->
+        <div class="podium-place rank-3">
+          <div class="podium-avatar">
+            <span class="material-symbols-rounded">award_star</span>
+          </div>
+          <span class="podium-name">علي</span>
+          <span class="podium-score">290</span>
+          <span class="podium-rank-tag">#3</span>
+        </div>
+
+      </div>
+
+      <!-- Full Standings List (Ranks 4+) -->
+      <div class="standings-list-container">
+        <ul class="standings-list" id="standings-list">
+          <li class="standing-item">
+            <span class="standing-rank">4</span>
+            <div class="standing-player">
+              <span class="material-symbols-rounded player-icon">person</span>
+              <span class="player-name">أحمد</span>
+            </div>
+            <span class="standing-score">180 نقطة</span>
+          </li>
+          <!-- Additional dynamic players will append here -->
+        </ul>
+      </div>
+
+      <!-- Goodbye & Replay Banner -->
+      <div class="goodbye-banner">
+        <p class="goodbye-text"> أداء رائع للجميع! هل تعتقد أنك تستطيع كشف الجاسوس المرة القادمة؟</p>
+        <button type="button" class="btn btn-primary btn-new-session" id="lb-new-game-btn">
+          <span>بدء لعبة جديدة</span>
+          <span class="material-symbols-rounded">play_arrow</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+</body>
 
 <!-- EXTERNAL JAVASCRIPT LINK -->
 <script src="index.js" defer></script>
