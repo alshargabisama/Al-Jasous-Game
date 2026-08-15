@@ -177,21 +177,18 @@ const UI = {
     return names;
   },
 
-  ensureKeepScoresCheckbox() {
+ensureKeepScoresCheckbox() {
     if (this.setup.keepScoresContainer || !this.setup.startBtn) return;
 
     const container = document.createElement("div");
-    container.className = "keep-scores-option hidden";
-    container.id = "keep-scores-container";
-    container.style.margin = "15px 0";
-    container.style.display = "flex";
-    container.style.alignItems = "center";
-    container.style.gap = "10px";
+    container.className = "keep-scores-container hidden";
+    container.id = "keep-scores-box";
 
     container.innerHTML = `
-      <input type="checkbox" id="keep-scores-checkbox" checked />
-      <label for="keep-scores-checkbox" style="font-size: 0.95rem; cursor: pointer;">
-        الاحتفاظ بالنقاط الحالية للاعبين المسجلين سابقاً
+      <label class="custom-checkbox-label">
+        <input type="checkbox" id="keep-scores-checkbox" checked />
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-text">الاحتفاظ بنقاط اللاعبين الحالية</span>
       </label>
     `;
 
