@@ -36,7 +36,7 @@ const allWords = [
   "قمامة", "كوكب", "حداد", "عالم آثار", "سلم", "خريطة", "عظام", "طبيب بيطري", "سجن", "جمل",
   "رمل", "كيس", "طبل", "سماعة", "مسلسل", "آلة كاتبة", "غرامة مالية", "ثريا", "حزام", "سم سم",
   "شاحن", "شباك", "عسل", "شبام حضرموت", "جبال", "قلعة القاهرة", "جسر", "سفينه", "منطاد هوائي", "بدلة فضاء",
-  "قمر صناعي", "ستارة", "صمغ", "صحن", "خوارزمية", "سماء", "ذكاء صناعي", "بنت الصحن", "فأر", "قوس قزح",
+  "قمر صناعي", "ستارة", "صمغ", "صحن", "شعر", "سماء", "ذكاء صناعي", "بنت الصحن", "فأر", "قوس قزح",
   "دباسة ورق", "فرشاه اسنان", "شميز", "زعفران", "رصاصة", "كرواسون", "خبز مخمر"
 ];
 
@@ -161,57 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function updateInputPlaceholders() {
-    const rows = playersList.querySelectorAll(".player-input-row");
-    rows.forEach((row, index) => {
-      const input = row.querySelector(".player-name-input");
-      if (input) {
-        input.placeholder = `اسم اللاعب ${index + 1}`;
-      }
-    });
-  }
 
-  // ==========================================
-  // 4. SETUP SCREEN: PLAYER ROW MANAGEMENT
-  // ==========================================
-
-  addPlayerBtn.addEventListener("click", () => {
-    const currentRows = playersList.querySelectorAll(".player-input-row");
-
-    if (currentRows.length >= 15) {
-      alert("الحد الأقصى للاعبين هو 15 لاعب!");
-      return;
-    }
-
-    const newRow = document.createElement("div");
-    newRow.className = "player-input-row";
-    newRow.innerHTML = `
-      <input type="text" class="player-name-input" placeholder="اسم اللاعب ${currentRows.length + 1}" required />
-      <button type="button" class="btn-delete-player" aria-label="حذف اللاعب">
-        <span class="material-symbols-rounded">delete</span>
-      </button>
-    `;
-
-    playersList.appendChild(newRow);
-  });
-
-  playersList.addEventListener("click", (e) => {
-    const deleteBtn = e.target.closest(".btn-delete-player");
-    if (!deleteBtn) return;
-
-    const currentRows = playersList.querySelectorAll(".player-input-row");
-
-    if (currentRows.length <= 3) {
-      alert("يجب أن يكون هناك 3 لاعبين على الأقل!");
-      return;
-    }
-
-    const rowToDelete = deleteBtn.closest(".player-input-row");
-    if (rowToDelete) {
-      rowToDelete.remove();
-      updateInputPlaceholders();
-    }
-  });
 
   // ==========================================
   // 5. GAME START & MATCH INITIALIZATION
