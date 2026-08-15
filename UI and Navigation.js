@@ -116,6 +116,8 @@ const UI = {
   },
 
   addPlayerRow(nameValue = "") {
+    if (!this.setup.playersList) return;
+
     const currentRows = this.setup.playersList.querySelectorAll(".player-input-row");
     if (currentRows.length >= 15) {
       alert("الحد الأقصى للاعبين هو 15 لاعب!");
@@ -151,15 +153,32 @@ const UI = {
   getEnteredPlayerNames() {
     const nameInputs = this.setup.playersList.querySelectorAll(".player-name-input");
     const names = [];
+    const nameSet = new Set();
+    let hasDuplicate = false;
+
     nameInputs.forEach((input) => {
       const trimmed = input.value.trim();
-      if (trimmed !== "") names.push(trimmed);
+      if (trimmed !== "") {
+        const lowerName = trimmed.toLowerCase();
+        if (nameSet.has(lowerName)) {
+          hasDuplicate = true;
+        } else {
+          nameSet.add(lowerName);
+          names.push(trimmed);
+        }
+      }
     });
+
+    if (hasDuplicate) {
+      alert("عذراً، لا يمكن استخدام أسماء مكررة! يرجى تغيير الأسماء المتشابهة.");
+      return null;
+    }
+
     return names;
   },
 
   ensureKeepScoresCheckbox() {
-    if (this.setup.keepScoresContainer) return;
+    if (this.setup.keepScoresContainer || !this.setup.startBtn) return;
 
     const container = document.createElement("div");
     container.className = "keep-scores-option hidden";
@@ -183,10 +202,12 @@ const UI = {
 
   showKeepScoresOption(show = true) {
     this.ensureKeepScoresCheckbox();
-    if (show) {
-      this.setup.keepScoresContainer.classList.remove("hidden");
-    } else {
-      this.setup.keepScoresContainer.classList.add("hidden");
+    if (this.setup.keepScoresContainer) {
+      if (show) {
+        this.setup.keepScoresContainer.classList.remove("hidden");
+      } else {
+        this.setup.keepScoresContainer.classList.add("hidden");
+      }
     }
   },
 
@@ -195,11 +216,24 @@ const UI = {
   },
 
   populateSetupForEdit(existingPlayers) {
-    this.setup.playersList.innerHTML = "";
-    existingPlayers.forEach((player) => {
-      this.addPlayerRow(player.name);
-    });
+    if (this.setup.playersList) {
+      this.setup.playersList.innerHTML = "";
+      existingPlayers.forEach((player) => {
+        this.addPlayerRow(player.name);
+      });
+    }
     this.showKeepScoresOption(true);
+    this.navigateTo(this.screens.setup);
+  },
+
+  resetSetupScreen() {
+    if (this.setup.playersList) {
+      this.setup.playersList.innerHTML = "";
+      this.addPlayerRow("");
+      this.addPlayerRow("");
+      this.addPlayerRow("");
+    }
+    this.showKeepScoresOption(false);
     this.navigateTo(this.screens.setup);
   },
 
@@ -207,18 +241,18 @@ const UI = {
   // 4. SCREEN RENDER METHODS
   // ----------------------------------------
   renderPassPhone(playerName) {
-    this.passPhone.playerName.textContent = playerName;
+    if (this.passPhone.playerName) this.passPhone.playerName.textContent = playerName;
     this.navigateTo(this.screens.passPhone);
   },
 
   renderRevealCard(isImposter, secretWord) {
     if (isImposter) {
-      this.reveal.cardRegular.classList.add("hidden");
-      this.reveal.cardSpy.classList.remove("hidden");
+      if (this.reveal.cardRegular) this.reveal.cardRegular.classList.add("hidden");
+      if (this.reveal.cardSpy) this.reveal.cardSpy.classList.remove("hidden");
     } else {
-      this.reveal.cardSpy.classList.add("hidden");
-      this.reveal.cardRegular.classList.remove("hidden");
-      this.reveal.secretWordText.textContent = secretWord;
+      if (this.reveal.cardSpy) this.reveal.cardSpy.classList.add("hidden");
+      if (this.reveal.cardRegular) this.reveal.cardRegular.classList.remove("hidden");
+      if (this.reveal.secretWordText) this.reveal.secretWordText.textContent = secretWord;
     }
     this.navigateTo(this.screens.reveal);
   },
@@ -228,10 +262,10 @@ const UI = {
   },
 
   renderClueTurn(playerName, currentTurnNum, totalPlayersNum, currentRound, totalRounds) {
-    this.clueTurn.activePlayerName.textContent = playerName;
-    this.clueTurn.currentRoundNum.textContent = currentRound;
-    this.clueTurn.totalRoundsNum.textContent = totalRounds;
-    this.clueTurn.cluePlayerCount.textContent = `${currentTurnNum} / ${totalPlayersNum}`;
+    if (this.clueTurn.activePlayerName) this.clueTurn.activePlayerName.textContent = playerName;
+    if (this.clueTurn.currentRoundNum) this.clueTurn.currentRoundNum.textContent = currentRound;
+    if (this.clueTurn.totalRoundsNum) this.clueTurn.totalRoundsNum.textContent = totalRounds;
+    if (this.clueTurn.cluePlayerCount) this.clueTurn.cluePlayerCount.textContent = `${currentTurnNum} / ${totalPlayersNum}`;
     this.navigateTo(this.screens.clueTurn);
   },
 
@@ -240,8 +274,8 @@ const UI = {
   },
 
   renderVotingTurn(voterPlayer, eligibleTargetPlayers) {
-    this.voting.voterName.textContent = voterPlayer.name;
-    this.voting.votingGrid.innerHTML = "";
+    if (this.voting.voterName) this.voting.voterName.textContent = voterPlayer.name;
+    if (this.voting.votingGrid) this.voting.votingGrid.innerHTML = "";
     this.selectedVotePlayerId = null;
 
     eligibleTargetPlayers.forEach((target) => {
@@ -262,14 +296,13 @@ const UI = {
           b.style.backgroundColor = "";
         });
 
-        // Add visual highlight when player selects an option
         btn.classList.add("selected");
         btn.style.borderColor = "#ff4d4d";
         btn.style.backgroundColor = "rgba(255, 77, 77, 0.15)";
         this.selectedVotePlayerId = target.id;
       });
 
-      this.voting.votingGrid.appendChild(btn);
+      if (this.voting.votingGrid) this.voting.votingGrid.appendChild(btn);
     });
 
     this.navigateTo(this.screens.voting);
@@ -278,36 +311,40 @@ const UI = {
   renderResult(sessionData) {
     const { isTeamWin, secretWord, imposterName, players } = sessionData;
 
-    this.result.secretWord.textContent = secretWord;
-    this.result.imposterName.textContent = imposterName;
+    if (this.result.secretWord) this.result.secretWord.textContent = secretWord;
+    if (this.result.imposterName) this.result.imposterName.textContent = imposterName;
 
-    if (isTeamWin) {
-      this.result.winnerBadge.className = "winner-badge status-team-win";
-      this.result.winnerTitleText.textContent = "فوز الفريق!";
-    } else {
-      this.result.winnerBadge.className = "winner-badge status-imposter-win";
-      this.result.winnerTitleText.textContent = "فوز الجاسوس!";
+    if (this.result.winnerBadge && this.result.winnerTitleText) {
+      if (isTeamWin) {
+        this.result.winnerBadge.className = "winner-badge status-team-win";
+        this.result.winnerTitleText.textContent = "فوز الفريق!";
+      } else {
+        this.result.winnerBadge.className = "winner-badge status-imposter-win";
+        this.result.winnerTitleText.textContent = "فوز الجاسوس!";
+      }
     }
 
-    this.result.tableBody.innerHTML = "";
-    players.forEach((player) => {
-      const tr = document.createElement("tr");
-      if (player.id === sessionData.imposterId) {
-        tr.className = "highlight-imposter";
-      }
+    if (this.result.tableBody) {
+      this.result.tableBody.innerHTML = "";
+      players.forEach((player) => {
+        const tr = document.createElement("tr");
+        if (player.id === sessionData.imposterId) {
+          tr.className = "highlight-imposter";
+        }
 
-      tr.innerHTML = `
-        <td>
-          <div class="player-cell">
-            <span class="material-symbols-rounded">${player.id === sessionData.imposterId ? "visibility_off" : "person"}</span>
-            <span>${player.name}</span>
-          </div>
-        </td>
-        <td class="session-score">+${player.sessionScore}</td>
-        <td class="total-score">${player.totalScore}</td>
-      `;
-      this.result.tableBody.appendChild(tr);
-    });
+        tr.innerHTML = `
+          <td>
+            <div class="player-cell">
+              <span class="material-symbols-rounded">${player.id === sessionData.imposterId ? "visibility_off" : "person"}</span>
+              <span>${player.name}</span>
+            </div>
+          </td>
+          <td class="session-score">+${player.sessionScore}</td>
+          <td class="total-score">${player.totalScore}</td>
+        `;
+        this.result.tableBody.appendChild(tr);
+      });
+    }
 
     this.navigateTo(this.screens.result);
   },
@@ -336,37 +373,38 @@ const UI = {
       rank3El.querySelector(".podium-score").textContent = rank3.totalScore;
     }
 
-    this.leaderboard.standingsList.innerHTML = "";
-    const remaining = sorted.slice(3);
+    if (this.leaderboard.standingsList) {
+      this.leaderboard.standingsList.innerHTML = "";
+      const remaining = sorted.slice(3);
 
-    if (remaining.length === 0) {
-      this.leaderboard.standingsList.innerHTML = `
-        <li class="standing-item">
-          <span style="width:100%; text-align:center;">لا يوجد لاعبين آخرين في القائمة</span>
-        </li>`;
-    } else {
-      remaining.forEach((player, idx) => {
-        const li = document.createElement("li");
-        li.className = "standing-item";
-        li.innerHTML = `
-          <span class="standing-rank">${idx + 4}</span>
-          <div class="standing-player">
-            <span class="material-symbols-rounded player-icon">person</span>
-            <span class="player-name">${player.name}</span>
-          </div>
-          <span class="standing-score">${player.totalScore} نقطة</span>
-        `;
-        this.leaderboard.standingsList.appendChild(li);
-      });
+      if (remaining.length > 0) {
+        remaining.forEach((player, idx) => {
+          const li = document.createElement("li");
+          li.className = "standing-item";
+          li.innerHTML = `
+            <span class="standing-rank">${idx + 4}</span>
+            <div class="standing-player">
+              <span class="material-symbols-rounded player-icon">person</span>
+              <span class="player-name">${player.name}</span>
+            </div>
+            <span class="standing-score">${player.totalScore} نقطة</span>
+          `;
+          this.leaderboard.standingsList.appendChild(li);
+        });
+      }
     }
 
     this.navigateTo(this.screens.leaderboard);
   },
 
   // ----------------------------------------
-  // 5. EVENT BINDINGS (BRIDGING TO GAME LOGIC)
+  // 5. EVENT BINDINGS
   // ----------------------------------------
   initEventListeners() {
+    // Re-query dynamically to ensure we grab the elements even if DOM order shifted
+    this.leaderboard.newGameBtn = document.getElementById("lb-new-game-btn") || document.querySelector("#leaderboard-screen .btn-primary");
+    this.leaderboard.homeBtn = document.getElementById("lb-home-btn") || document.querySelector("#leaderboard-screen .btn-icon");
+
     this.ensureKeepScoresCheckbox();
 
     // Home Navigation
@@ -376,8 +414,7 @@ const UI = {
 
     if (homeStartBtn) {
       homeStartBtn.addEventListener("click", () => {
-        this.showKeepScoresOption(false);
-        this.navigateTo(this.screens.setup);
+        this.resetSetupScreen();
       });
     }
     if (openRulesBtn) {
@@ -402,6 +439,7 @@ const UI = {
     if (this.setup.startBtn) {
       this.setup.startBtn.addEventListener("click", () => {
         const names = this.getEnteredPlayerNames();
+        if (!names) return;
         if (names.length < 3) {
           alert("يرجى إدخال أسماء 3 لاعبين على الأقل لبدء اللعبة!");
           return;
@@ -483,20 +521,22 @@ const UI = {
     // Leaderboard Actions
     if (this.leaderboard.homeBtn) {
       this.leaderboard.homeBtn.addEventListener("click", () => {
-        this.showKeepScoresOption(false);
         this.navigateTo(this.screens.home);
       });
     }
 
     if (this.leaderboard.newGameBtn) {
       this.leaderboard.newGameBtn.addEventListener("click", () => {
-        if (window.GameLogic) window.GameLogic.replayMatch();
+        if (window.GameLogic && typeof window.GameLogic.resetToNewGame === "function") {
+          window.GameLogic.resetToNewGame();
+        } else {
+          this.resetSetupScreen();
+        }
       });
     }
   }
 };
 
-// Initialize event listeners when DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   UI.initEventListeners();
 });
