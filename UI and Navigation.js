@@ -1,5 +1,5 @@
 // ==========================================
-// UI & DOM CONTROLLER MODULE
+// UI & DOM CONTROLLER MODULE (navigation.js)
 // ==========================================
 
 const UI = {
@@ -27,8 +27,8 @@ const UI = {
     playersList: document.getElementById("players-list"),
     addBtn: document.getElementById("add-player-btn"),
     startBtn: document.getElementById("start-game-btn"),
-    keepScoresContainer: null, // Dynamically created or toggled container
-    keepScoresCheckbox: null,  // Checkbox element for score preservation
+    keepScoresContainer: null,
+    keepScoresCheckbox: null,
   },
 
   passPhone: {
@@ -103,7 +103,7 @@ const UI = {
   },
 
   // ----------------------------------------
-  // 3. SETUP SCREEN DOM & SCORE PRESERVATION LOGIC
+  // 3. SETUP SCREEN DOM LOGIC
   // ----------------------------------------
   updateInputPlaceholders() {
     const rows = this.setup.playersList.querySelectorAll(".player-input-row");
@@ -262,7 +262,7 @@ const UI = {
           b.style.backgroundColor = "";
         });
 
-        // Add 'selected' and inline red highlight for active choice
+        // Add visual highlight when player selects an option
         btn.classList.add("selected");
         btn.style.borderColor = "#ff4d4d";
         btn.style.backgroundColor = "rgba(255, 77, 77, 0.15)";
@@ -388,44 +388,58 @@ const UI = {
     }
 
     // Setup Actions
-    this.setup.addBtn.addEventListener("click", () => this.addPlayerRow());
-    this.setup.playersList.addEventListener("click", (e) => {
-      const deleteBtn = e.target.closest(".btn-delete-player");
-      if (deleteBtn) this.deletePlayerRow(deleteBtn);
-    });
+    if (this.setup.addBtn) {
+      this.setup.addBtn.addEventListener("click", () => this.addPlayerRow());
+    }
+    if (this.setup.playersList) {
+      this.setup.playersList.addEventListener("click", (e) => {
+        const deleteBtn = e.target.closest(".btn-delete-player");
+        if (deleteBtn) this.deletePlayerRow(deleteBtn);
+      });
+    }
 
     // Game Start
-    this.setup.startBtn.addEventListener("click", () => {
-      const names = this.getEnteredPlayerNames();
-      if (names.length < 3) {
-        alert("يرجى إدخال أسماء 3 لاعبين على الأقل لبدء اللعبة!");
-        return;
-      }
-      const keepScores = this.shouldKeepScores();
-      if (window.GameLogic) {
-        window.GameLogic.startMatch(names, keepScores);
-      }
-    });
+    if (this.setup.startBtn) {
+      this.setup.startBtn.addEventListener("click", () => {
+        const names = this.getEnteredPlayerNames();
+        if (names.length < 3) {
+          alert("يرجى إدخال أسماء 3 لاعبين على الأقل لبدء اللعبة!");
+          return;
+        }
+        const keepScores = this.shouldKeepScores();
+        if (window.GameLogic) {
+          window.GameLogic.startMatch(names, keepScores);
+        }
+      });
+    }
 
     // Pass Phone -> Reveal
-    this.passPhone.readyBtn.addEventListener("click", () => {
-      if (window.GameLogic) window.GameLogic.handleReadyToReveal();
-    });
+    if (this.passPhone.readyBtn) {
+      this.passPhone.readyBtn.addEventListener("click", () => {
+        if (window.GameLogic) window.GameLogic.handleReadyToReveal();
+      });
+    }
 
     // Reveal -> Pass Phone / Round Init
-    this.reveal.doneBtn.addEventListener("click", () => {
-      if (window.GameLogic) window.GameLogic.handleDoneRevealTurn();
-    });
+    if (this.reveal.doneBtn) {
+      this.reveal.doneBtn.addEventListener("click", () => {
+        if (window.GameLogic) window.GameLogic.handleDoneRevealTurn();
+      });
+    }
 
     // Round Init -> Clue Phase
-    this.roundInit.startBtn.addEventListener("click", () => {
-      if (window.GameLogic) window.GameLogic.startCluePhase();
-    });
+    if (this.roundInit.startBtn) {
+      this.roundInit.startBtn.addEventListener("click", () => {
+        if (window.GameLogic) window.GameLogic.startCluePhase();
+      });
+    }
 
     // Clue Turn -> Next
-    this.clueTurn.nextBtn.addEventListener("click", () => {
-      if (window.GameLogic) window.GameLogic.handleNextClueTurn();
-    });
+    if (this.clueTurn.nextBtn) {
+      this.clueTurn.nextBtn.addEventListener("click", () => {
+        if (window.GameLogic) window.GameLogic.handleNextClueTurn();
+      });
+    }
 
     // Voting Init -> Voting Turn Loop
     if (this.votingInit.startBtn) {
@@ -470,7 +484,7 @@ const UI = {
     if (this.leaderboard.homeBtn) {
       this.leaderboard.homeBtn.addEventListener("click", () => {
         this.showKeepScoresOption(false);
-        this.navigateTo(this.screens.setup);
+        this.navigateTo(this.screens.home);
       });
     }
 
@@ -482,6 +496,7 @@ const UI = {
   }
 };
 
+// Initialize event listeners when DOM content is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   UI.initEventListeners();
 });

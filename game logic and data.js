@@ -1,15 +1,21 @@
 // ==========================================
-// 1. DATA STRUCTURES & DATA LAYER
+// GAME LOGIC & DATA LAYER (game-logic.js)
 // ==========================================
 
+/**
+ * Class representing a Player in the game.
+ */
 class Player {
   constructor(id, name) {
     this.id = id;
     this.name = name.trim();
-    this.sessionScore = 0;
-    this.totalScore = 0;
+    this.sessionScore = 0; // Score earned in the current match
+    this.totalScore = 0;   // Cumulative score across multiple matches
   }
 
+  /**
+   * Adds points to both the current round and total game score.
+   */
   addScore(points) {
     if (typeof points === "number" && points > 0) {
       this.sessionScore += points;
@@ -17,11 +23,17 @@ class Player {
     }
   }
 
+  /**
+   * Resets only the current session score for a new match.
+   */
   resetSessionScore() {
     this.sessionScore = 0;
   }
 }
 
+/**
+ * Array of words used for game rounds.
+ */
 const allWords = [
   "قطة", "كلب", "تفاحة", "موز", "بيتزا", "سيارة", "حافلة", "مدرسة", "معلم", "طبيب",
   "منزل", "هاتف", "حاسوب", "كتاب", "كرسي", "طاولة", "ماء", "قهوة", "شمس", "قمر",
@@ -40,12 +52,19 @@ const allWords = [
   "دباسة ورق", "فرشاه اسنان", "شميز", "زعفران", "رصاصة", "كرواسون", "خبز مخمر"
 ];
 
+/**
+ * Manages word selection and ensures non-repeating words during game sessions.
+ */
 const wordManager = {
   usedWords: new Set(),
 
   getRandomWord() {
     if (!allWords || allWords.length === 0) return "كلمة سرية";
-    if (this.usedWords.size >= allWords.length) this.usedWords.clear();
+    
+    // Reset pool if all words have been used once
+    if (this.usedWords.size >= allWords.length) {
+      this.usedWords.clear();
+    }
 
     let selectedWord;
     do {
@@ -58,22 +77,27 @@ const wordManager = {
   }
 };
 
-const gameState = {
+/**
+ * Main state container and game logic engine exposed globally via window.GameLogic
+ */
+window.GameLogic = {
   players: [],
   imposterId: null,
   secretWord: "",
-  
-  // Turn Controllers
-  currentPassIndex: 0,    // Pass-the-phone loop index
-  currentRound: 1,        // Clue round counter
-  totalRounds: 2,         // Standard 2 clue rounds
-  currentClueIndex: 0,    // Active clue speaker index
+
+  // Turn Indices
+  currentPassIndex: 0,
+  currentRound: 1,
+  totalRounds: 2,
+  currentClueIndex: 0,
 
   // Voting Trackers
-  currentVoterIndex: 0,   // Active voting player index
-  votes: {},              // Map: voterPlayerId -> votedTargetPlayerId
-  selectedVoteTargetId: null,
+  currentVoterIndex: 0,
+  votes: {},
 
+  /**
+   * Clears state for a new match while maintaining players and total scores.
+   */
   resetMatchState() {
     this.imposterId = null;
     this.secretWord = "";
@@ -82,420 +106,202 @@ const gameState = {
     this.currentClueIndex = 0;
     this.currentVoterIndex = 0;
     this.votes = {};
-    this.selectedVoteTargetId = null;
-    this.players.forEach(p => p.resetSessionScore());
-  }
-};
+    this.players.forEach((p) => p.resetSessionScore());
+  },
 
-// ==========================================
-// 2. DOM CONTENT LOADED & INITIALIZATION
-// ==========================================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  // --- SCREEN ELEMENTS ---
-  const setupScreen = document.getElementById("setup-screen");
-  const passPhoneScreen = document.getElementById("pass-phone-screen");
-  const revealScreen = document.getElementById("reveal-screen");
-  const roundInitScreen = document.getElementById("round-initialization-screen");
-  const clueTurnScreen = document.getElementById("clue-turn-screen");
-  const votingInitScreen = document.getElementById("voting-initialization-screen");
-  const votingScreen = document.getElementById("voting-screen");
-  const resultScreen = document.getElementById("result-screen");
-  const leaderboardScreen = document.getElementById("leaderboard-screen");
-
-  // --- SETUP SCREEN ELEMENTS ---
-  const playersList = document.getElementById("players-list");
-  const addPlayerBtn = document.getElementById("add-player-btn");
-  const startGameBtn = document.getElementById("start-game-btn");
-
-  // --- PASS PHONE SCREEN ELEMENTS ---
-  const currentPlayerName = document.getElementById("current-player-name");
-  const readyBtn = document.getElementById("ready-btn");
-
-  // --- REVEAL ROLE SCREEN ELEMENTS ---
-  const cardRegular = document.getElementById("card-regular");
-  const cardSpy = document.getElementById("card-spy");
-  const secretWordText = document.getElementById("secret-word-text");
-  const doneTurnBtn = document.getElementById("done-turn-btn");
-
-  // --- ROUND INIT SCREEN ELEMENTS ---
-  const roundStartBtn = document.getElementById("round-start-btn");
-
-  // --- CLUE TURN SCREEN ELEMENTS ---
-  const currentRoundNum = document.getElementById("current-round-num");
-  const totalRoundsNum = document.getElementById("total-rounds-num");
-  const activePlayerName = document.getElementById("active-player-name");
-  const cluePlayerCount = document.getElementById("clue-player-count");
-  const nextTurnBtn = document.getElementById("next-turn-btn");
-
-  // --- VOTING INIT & VOTING SCREEN ELEMENTS ---
-  const startVotingBtn = document.getElementById("start-voting-btn");
-  const voterName = document.getElementById("voter-name");
-  const votingGrid = document.getElementById("voting-grid");
-  const submitVoteBtn = document.getElementById("submit-vote-btn");
-
-  // --- SESSION RESULT SCREEN ELEMENTS ---
-  const winnerBadge = document.getElementById("winner-badge");
-  const winnerTitleText = document.getElementById("winner-title-text");
-  const resultSecretWord = document.getElementById("result-secret-word");
-  const resultImposterName = document.getElementById("result-imposter-name");
-  const scoresTableBody = document.getElementById("scores-table-body");
-  const replayBtn = document.getElementById("replay-btn");
-  const editPlayersBtn = document.getElementById("edit-players-btn");
-  const toLeaderboardBtn = document.getElementById("to-leaderboard-btn");
-
-  // --- LEADERBOARD SCREEN ELEMENTS ---
-  const standingsList = document.getElementById("standings-list");
-  const lbHomeBtn = document.getElementById("lb-home-btn");
-  const lbNewGameBtn = document.getElementById("lb-new-game-btn");
-
-  // ==========================================
-  // 3. NAVIGATION & UI HELPER FUNCTIONS
-  // ==========================================
-
-  function navigateTo(currentScreen, nextScreen) {
-    if (currentScreen && nextScreen) {
-      currentScreen.classList.add("hidden");
-      nextScreen.classList.remove("hidden");
-    }
-  }
-
-
-
-  // ==========================================
-  // 5. GAME START & MATCH INITIALIZATION
-  // ==========================================
-
-  startGameBtn.addEventListener("click", () => {
-    const nameInputs = playersList.querySelectorAll(".player-name-input");
-    const enteredNames = [];
-
-    nameInputs.forEach((input) => {
-      const trimmed = input.value.trim();
-      if (trimmed !== "") {
-        enteredNames.push(trimmed);
-      }
-    });
-
-    if (enteredNames.length < 3) {
-      alert("يرجى إدخال أسماء 3 لاعبين على الأقل لبدء اللعبة!");
-      return;
-    }
-
-    gameState.players = enteredNames.map((name, idx) => new Player(idx + 1, name));
-    gameState.resetMatchState();
-
-    gameState.secretWord = wordManager.getRandomWord();
-    const randomImposterIndex = Math.floor(Math.random() * gameState.players.length);
-    gameState.imposterId = gameState.players[randomImposterIndex].id;
-
-    updatePassPhoneScreen();
-    navigateTo(setupScreen, passPhoneScreen);
-  });
-
-  // ==========================================
-  // 6. PASS THE PHONE & REVEAL ROLE FLOW
-  // ==========================================
-
-  function updatePassPhoneScreen() {
-    const activePlayer = gameState.players[gameState.currentPassIndex];
-    if (activePlayer) {
-      currentPlayerName.textContent = activePlayer.name;
-    }
-  }
-
-  readyBtn.addEventListener("click", () => {
-    const activePlayer = gameState.players[gameState.currentPassIndex];
-
-    if (activePlayer.id === gameState.imposterId) {
-      cardRegular.classList.add("hidden");
-      cardSpy.classList.remove("hidden");
-    } else {
-      cardSpy.classList.add("hidden");
-      cardRegular.classList.remove("hidden");
-      secretWordText.textContent = gameState.secretWord;
-    }
-
-    navigateTo(passPhoneScreen, revealScreen);
-  });
-
-  doneTurnBtn.addEventListener("click", () => {
-    gameState.currentPassIndex++;
-
-    if (gameState.currentPassIndex < gameState.players.length) {
-      updatePassPhoneScreen();
-      navigateTo(revealScreen, passPhoneScreen);
-    } else {
-      navigateTo(revealScreen, roundInitScreen);
-    }
-  });
-
-  // ==========================================
-  // 7. CLUE ROUNDS LOGIC & FLOW
-  // ==========================================
-
-  roundStartBtn.addEventListener("click", () => {
-    gameState.currentRound = 1;
-    gameState.currentClueIndex = 0;
-    updateClueTurnScreen();
-    navigateTo(roundInitScreen, clueTurnScreen);
-  });
-
-  function updateClueTurnScreen() {
-    const activePlayer = gameState.players[gameState.currentClueIndex];
-
-    currentRoundNum.textContent = gameState.currentRound;
-    totalRoundsNum.textContent = gameState.totalRounds;
-    activePlayerName.textContent = activePlayer.name;
-    cluePlayerCount.textContent = `${gameState.currentClueIndex + 1} / ${gameState.players.length}`;
-  }
-
-  nextTurnBtn.addEventListener("click", () => {
-    gameState.currentClueIndex++;
-
-    if (gameState.currentClueIndex < gameState.players.length) {
-      updateClueTurnScreen();
-    } else {
-      if (gameState.currentRound < gameState.totalRounds) {
-        gameState.currentRound++;
-        gameState.currentClueIndex = 0;
-        updateClueTurnScreen();
-      } else {
-        navigateTo(clueTurnScreen, votingInitScreen);
-      }
-    }
-  });
-
-  // ==========================================
-  // 8. VOTING LOGIC & FLOW
-  // ==========================================
-
-  startVotingBtn.addEventListener("click", () => {
-    gameState.currentVoterIndex = 0;
-    gameState.votes = {};
-    renderVotingTurn();
-    navigateTo(votingInitScreen, votingScreen);
-  });
-
-  function renderVotingTurn() {
-    const voter = gameState.players[gameState.currentVoterIndex];
-    voterName.textContent = voter.name;
-    gameState.selectedVoteTargetId = null;
-    votingGrid.innerHTML = "";
-
-    // Generate selectable cards for all other players
-    gameState.players.forEach((targetPlayer) => {
-      if (targetPlayer.id === voter.id) return; // Cannot vote for oneself
-
-      const optionBtn = document.createElement("button");
-      optionBtn.type = "button";
-      optionBtn.className = "vote-option-btn";
-      optionBtn.dataset.playerId = targetPlayer.id;
-      optionBtn.innerHTML = `
-        <span class="material-symbols-rounded vote-icon">person</span>
-        <span class="player-name">${targetPlayer.name}</span>
-      `;
-
-      optionBtn.addEventListener("click", () => {
-        const currentSelected = votingGrid.querySelector(".vote-option-btn.selected");
-        if (currentSelected) currentSelected.classList.remove("selected");
-
-        optionBtn.classList.add("selected");
-        gameState.selectedVoteTargetId = targetPlayer.id;
+  /**
+   * Initializes a brand-new game session with player names.
+   * Option to retain existing scores if setup is edited during play.
+   */
+  startMatch(enteredNames, keepScores = false) {
+    if (keepScores) {
+      // Map names to existing Player objects if present, else create new ones
+      this.players = enteredNames.map((name, idx) => {
+        const existing = this.players.find((p) => p.name === name);
+        if (existing) {
+          existing.id = idx + 1;
+          return existing;
+        }
+        return new Player(idx + 1, name);
       });
-
-      votingGrid.appendChild(optionBtn);
-    });
-  }
-
-  submitVoteBtn.addEventListener("click", () => {
-    if (!gameState.selectedVoteTargetId) {
-      alert("يرجى اختيار شخص للتصويت ضده قبل المتابعة!");
-      return;
-    }
-
-    const voter = gameState.players[gameState.currentVoterIndex];
-    gameState.votes[voter.id] = gameState.selectedVoteTargetId;
-
-    gameState.currentVoterIndex++;
-
-    if (gameState.currentVoterIndex < gameState.players.length) {
-      renderVotingTurn();
     } else {
-      calculateAndShowResults();
+      this.players = enteredNames.map((name, idx) => new Player(idx + 1, name));
     }
-  });
 
-  // ==========================================
-  // 9. SCORE CALCULATION & SESSION RESULT
-  // ==========================================
+    this.resetMatchState();
 
-  function calculateAndShowResults() {
-    const totalPlayers = gameState.players.length;
+    // Select Secret Word & Imposter
+    this.secretWord = wordManager.getRandomWord();
+    const randomIndex = Math.floor(Math.random() * this.players.length);
+    this.imposterId = this.players[randomIndex].id;
+
+    // Trigger UI Pass Phone Phase
+    const firstPlayer = this.players[this.currentPassIndex];
+    UI.renderPassPhone(firstPlayer.name);
+  },
+
+  /**
+   * Triggered when the current player clicks "Ready" to reveal their secret role.
+   */
+  handleReadyToReveal() {
+    const activePlayer = this.players[this.currentPassIndex];
+    const isImposter = activePlayer.id === this.imposterId;
+    UI.renderRevealCard(isImposter, this.secretWord);
+  },
+
+  /**
+   * Advances pass-the-phone turn to the next player or finishes the phase.
+   */
+  handleDoneRevealTurn() {
+    this.currentPassIndex++;
+
+    if (this.currentPassIndex < this.players.length) {
+      const nextPlayer = this.players[this.currentPassIndex];
+      UI.renderPassPhone(nextPlayer.name);
+    } else {
+      UI.renderRoundInit();
+    }
+  },
+
+  /**
+   * Initializes clue-giving rounds.
+   */
+  startCluePhase() {
+    this.currentRound = 1;
+    this.currentClueIndex = 0;
+    this.renderCurrentClueTurn();
+  },
+
+  renderCurrentClueTurn() {
+    const activePlayer = this.players[this.currentClueIndex];
+    UI.renderClueTurn(
+      activePlayer.name,
+      this.currentClueIndex + 1,
+      this.players.length,
+      this.currentRound,
+      this.totalRounds
+    );
+  },
+
+  /**
+   * Steps through players giving clues, advancing rounds when complete.
+   */
+  handleNextClueTurn() {
+    this.currentClueIndex++;
+
+    if (this.currentClueIndex < this.players.length) {
+      this.renderCurrentClueTurn();
+    } else {
+      if (this.currentRound < this.totalRounds) {
+        this.currentRound++;
+        this.currentClueIndex = 0;
+        this.renderCurrentClueTurn();
+      } else {
+        UI.renderVotingInit();
+      }
+    }
+  },
+
+  /**
+   * Prepares voting state and launches voting step.
+   */
+  startVotingPhase() {
+    this.currentVoterIndex = 0;
+    this.votes = {};
+    this.renderCurrentVotingTurn();
+  },
+
+  renderCurrentVotingTurn() {
+    const voter = this.players[this.currentVoterIndex];
+    // Filter out the voter so they cannot vote for themselves
+    const targets = this.players.filter((p) => p.id !== voter.id);
+    UI.renderVotingTurn(voter, targets);
+  },
+
+  /**
+   * Registers a vote and triggers the next player's voting view or calculates final results.
+   */
+  handleVoteSubmit(targetPlayerId) {
+    const voter = this.players[this.currentVoterIndex];
+    this.votes[voter.id] = parseInt(targetPlayerId, 10);
+
+    this.currentVoterIndex++;
+
+    if (this.currentVoterIndex < this.players.length) {
+      this.renderCurrentVotingTurn();
+    } else {
+      this.calculateResultsAndShow();
+    }
+  },
+
+  /**
+   * Calculates votes, awards scores according to game logic, and updates results UI.
+   */
+  calculateResultsAndShow() {
+    const totalPlayers = this.players.length;
     let correctVotesCount = 0;
 
-    // Reset session scores before calculating
-    gameState.players.forEach((p) => p.resetSessionScore());
+    this.players.forEach((p) => p.resetSessionScore());
 
-    // Count how many voted correctly for the imposter
-    gameState.players.forEach((voter) => {
-      const votedId = gameState.votes[voter.id];
-      if (votedId === gameState.imposterId) {
+    // Count how many players successfully voted for the imposter
+    this.players.forEach((voter) => {
+      const votedTargetId = this.votes[voter.id];
+      if (votedTargetId === this.imposterId) {
         correctVotesCount++;
       }
     });
 
+    // Team wins if majority correctly identifies the imposter
     const isTeamWin = correctVotesCount >= Math.ceil(totalPlayers / 2);
 
     if (isTeamWin) {
-      // Team Win Logic:
-      // Members who voted correctly get +1 point. All others (including imposter) get 0.
-      gameState.players.forEach((player) => {
-        const votedTarget = gameState.votes[player.id];
-        if (votedTarget === gameState.imposterId) {
+      // Team Win: Players who voted correctly receive +1 point
+      this.players.forEach((player) => {
+        if (this.votes[player.id] === this.imposterId) {
           player.addScore(1);
         }
       });
     } else {
-      // Imposter Win Logic:
-      // Imposter gets +2 points. Anyone who guessed correctly gets +1 point.
-      gameState.players.forEach((player) => {
-        if (player.id === gameState.imposterId) {
+      // Imposter Win: Imposter gets +2 points, correct voters still get +1 point
+      this.players.forEach((player) => {
+        if (player.id === this.imposterId) {
           player.addScore(2);
-        } else {
-          const votedTarget = gameState.votes[player.id];
-          if (votedTarget === gameState.imposterId) {
-            player.addScore(1);
-          }
+        } else if (this.votes[player.id] === this.imposterId) {
+          player.addScore(1);
         }
       });
     }
 
-    // Update Result UI
-    const imposterPlayer = gameState.players.find((p) => p.id === gameState.imposterId);
-    resultSecretWord.textContent = gameState.secretWord;
-    resultImposterName.textContent = imposterPlayer ? imposterPlayer.name : "غير معروف";
+    const imposterPlayer = this.players.find((p) => p.id === this.imposterId);
 
-    if (isTeamWin) {
-      winnerBadge.className = "winner-badge status-team-win";
-      winnerTitleText.textContent = "فوز الفريق!";
-    } else {
-      winnerBadge.className = "winner-badge status-imposter-win";
-      winnerTitleText.textContent = "فوز الجاسوس!";
-    }
-
-    // Render Scores Table
-    scoresTableBody.innerHTML = "";
-    gameState.players.forEach((player) => {
-      const isImposter = player.id === gameState.imposterId;
-      const tr = document.createElement("tr");
-      if (isImposter) tr.className = "highlight-imposter";
-
-      tr.innerHTML = `
-        <td>
-          <div class="player-cell">
-            <span class="material-symbols-rounded">${isImposter ? "visibility_off" : "person"}</span>
-            <span>${player.name}</span>
-          </div>
-        </td>
-        <td class="session-score">+${player.sessionScore}</td>
-        <td class="total-score">${player.totalScore}</td>
-      `;
-      scoresTableBody.appendChild(tr);
+    UI.renderResult({
+      isTeamWin,
+      secretWord: this.secretWord,
+      imposterId: this.imposterId,
+      imposterName: imposterPlayer ? imposterPlayer.name : "غير معروف",
+      players: this.players
     });
+  },
 
-    navigateTo(votingScreen, resultScreen);
+  /**
+   * Restarts a match directly with the current active players.
+   */
+  replayMatch() {
+    const currentNames = this.players.map((p) => p.name);
+    this.startMatch(currentNames, true);
+  },
+
+  /**
+   * Prepares setup UI for editing player names without losing current points.
+   */
+  prepareEditPlayers() {
+    UI.populateSetupForEdit(this.players);
+  },
+
+  /**
+   * Displays leaderboard screen populated with current total player scores.
+   */
+  showLeaderboard() {
+    UI.renderLeaderboard(this.players);
   }
-
-  // Session Result Navigation
-  replayBtn.addEventListener("click", () => {
-    // Replay with current players
-    gameState.resetMatchState();
-    gameState.secretWord = wordManager.getRandomWord();
-    const randomImposterIndex = Math.floor(Math.random() * gameState.players.length);
-    gameState.imposterId = gameState.players[randomImposterIndex].id;
-
-    updatePassPhoneScreen();
-    navigateTo(resultScreen, passPhoneScreen);
-  });
-
-  editPlayersBtn.addEventListener("click", () => {
-    navigateTo(resultScreen, setupScreen);
-  });
-
-  toLeaderboardBtn.addEventListener("click", () => {
-    renderLeaderboard();
-    navigateTo(resultScreen, leaderboardScreen);
-  });
-
-  // ==========================================
-  // 10. LEADERBOARD SCREEN LOGIC
-  // ==========================================
-
-  function renderLeaderboard() {
-    // Sort players descending by totalScore
-    const sortedPlayers = [...gameState.players].sort((a, b) => b.totalScore - a.totalScore);
-
-    const rank1 = sortedPlayers[0];
-    const rank2 = sortedPlayers[1];
-    const rank3 = sortedPlayers[2];
-
-    const rank1El = leaderboardScreen.querySelector(".podium-place.rank-1");
-    const rank2El = leaderboardScreen.querySelector(".podium-place.rank-2");
-    const rank3El = leaderboardScreen.querySelector(".podium-place.rank-3");
-
-    if (rank1 && rank1El) {
-      rank1El.querySelector(".podium-name").textContent = rank1.name;
-      rank1El.querySelector(".podium-score").textContent = rank1.totalScore;
-    }
-    if (rank2 && rank2El) {
-      rank2El.querySelector(".podium-name").textContent = rank2.name;
-      rank2El.querySelector(".podium-score").textContent = rank2.totalScore;
-    }
-    if (rank3 && rank3El) {
-      rank3El.querySelector(".podium-name").textContent = rank3.name;
-      rank3El.querySelector(".podium-score").textContent = rank3.totalScore;
-    }
-
-    // Render Ranks 4+
-    standingsList.innerHTML = "";
-    const remainingPlayers = sortedPlayers.slice(3);
-
-    if (remainingPlayers.length === 0) {
-      standingsList.innerHTML = `<li class="standing-item"><span style="width: 100%; text-align: center;">لا يوجد أفراد آخرين في القائمة</span></li>`;
-    } else {
-      remainingPlayers.forEach((player, index) => {
-        const li = document.createElement("li");
-        li.className = "standing-item";
-        li.innerHTML = `
-          <span class="standing-rank">${index + 4}</span>
-          <div class="standing-player">
-            <span class="material-symbols-rounded player-icon">person</span>
-            <span class="player-name">${player.name}</span>
-          </div>
-          <span class="standing-score">${player.totalScore} نقطة</span>
-        `;
-        standingsList.appendChild(li);
-      });
-    }
-  }
-
-  // Leaderboard Navigation
-  lbHomeBtn.addEventListener("click", () => {
-    // Return to first setup screen
-    navigateTo(leaderboardScreen, setupScreen);
-  });
-
-  lbNewGameBtn.addEventListener("click", () => {
-    // Start fresh session reset
-    gameState.resetMatchState();
-    gameState.secretWord = wordManager.getRandomWord();
-    const randomImposterIndex = Math.floor(Math.random() * gameState.players.length);
-    gameState.imposterId = gameState.players[randomImposterIndex].id;
-
-    updatePassPhoneScreen();
-    navigateTo(leaderboardScreen, passPhoneScreen);
-  });
-
-});
+};
