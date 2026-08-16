@@ -305,3 +305,7 @@ window.GameLogic = {
     UI.renderLeaderboard(this.players);
   }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { Player, wordManager, GameLogic: window.GameLogic };
+}
