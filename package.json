@@ -4,8 +4,8 @@
   "description": "Arabic social deduction party game built with HTML, CSS and JavaScript.",
   "main": "game logic and data.js",
   "scripts": {
-    "test": "jest"
-  },
+  "test": "jest --testEnvironment=jsdom"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alshargabisama/Al-Jasous-Game.git"
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/alshargabisama/Al-Jasous-Game#readme",
   "devDependencies": {
-    "jest": "^30.4.2"
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1"
   }
 }
