@@ -8,10 +8,10 @@ This document outlines the manual End-to-End (E2E) and User Acceptance Testing (
 
 | Test ID | Feature Area | Test Scenario | Pre-conditions | Steps to Execute | Expected Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-SET-01** | Player Setup | Enforce minimum 3 players rule | Setup screen open | 1. Enter 2 player names.<br>2. Click "Start Game". | Game blocks start and displays an alert requiring at least 3 players. | Pending |
-| **TC-SET-02** | Player Setup | Enforce maximum 15 players limit | Setup screen open | 1. Add 15 player names.<br>2. Attempt to add a 16th player input. | Add button is disabled or an alert limits players to 15 max. | Pending |
-| **TC-SET-03** | Player Setup | Duplicate player name prevention | Setup screen open | 1. Enter "Samaa" for Player 1.<br>2. Enter "Samaa" for Player 2.<br>3. Click "Start Game". | Game blocks start with a duplicate name error warning. | Pending |
-| **TC-SET-04** | Player Setup | Whitespace trimming on player names | Setup screen open | 1. Enter `"  Ahmed  "` with leading/trailing spaces.<br>2. Start match. | Name is trimmed to `"Ahmed"` on all game screens and cards. | Pending |
+| **TC-SET-01** | Player Setup | Enforce minimum 3 players rule | Setup screen open | 1. Enter 2 player names.<br>2. Click "Start Game". | Game blocks start and displays an alert requiring at least 3 players. | pass |
+| **TC-SET-02** | Player Setup | Enforce maximum 15 players limit | Setup screen open | 1. Add 15 player names.<br>2. Attempt to add a 16th player input. | Add button is disabled or an alert limits players to 15 max. | pass |
+| **TC-SET-03** | Player Setup | Duplicate player name prevention | Setup screen open | 1. Enter "Samaa" for Player 1.<br>2. Enter "Samaa" for Player 2.<br>3. Click "Start Game". | Game blocks start with a duplicate name error warning. | pass |
+| **TC-SET-04** | Player Setup | Whitespace trimming on player names | Setup screen open | 1. Enter `"  Ahmed  "` with leading/trailing spaces.<br>2. Start match. | Name is trimmed to `"Ahmed"` on all game screens and cards. | pass |
 
 ---
 
