@@ -19,8 +19,8 @@ This document outlines the manual End-to-End (E2E) and User Acceptance Testing (
 
 | Test ID | Feature Area | Test Scenario | Pre-conditions | Steps to Execute | Expected Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-PLAY-01** | Secret Role Reveal | Exact one Imposter assignment | Setup complete (3 players) | 1. Pass phone to each player.<br>2. Tap "Reveal Role" for each. | Exactly 1 player sees "You are the Imposter!", and 2 players see the secret category word. | Pending |
-| **TC-PLAY-02** | Pass Phone Sequence | Privacy screen modal | Game started | 1. Player 1 views role.<br>2. Click "Next Player". | Privacy screen covers the role until Player 2 confirms readiness. | Pending |
+| **TC-PLAY-01** | Secret Role Reveal | Exact one Imposter assignment | Setup complete (3 players) | 1. Pass phone to each player.<br>2. Tap "Reveal Role" for each. | Exactly 1 player sees "You are the Imposter!", and 2 players see the secret category word. | pass |
+| **TC-PLAY-02** | Pass Phone Sequence | Privacy screen modal | Game started | 1. Player 1 views role.<br>2. Click "Next Player". | Privacy screen covers the role until Player 2 confirms readiness. | pass |
 
 ---
 
@@ -28,8 +28,8 @@ This document outlines the manual End-to-End (E2E) and User Acceptance Testing (
 
 | Test ID | Feature Area | Test Scenario | Pre-conditions | Steps to Execute | Expected Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-VOTE-01** | Voting Logic | Team Win condition (Majority vote) | Match completed (3 players) | 1. Have 2 or more players vote for the correct Imposter ID. | App announces **Team Victory** and displays vote breakdown. | Pending |
-| **TC-VOTE-02** | Voting Logic | Imposter Win condition (Majority fail) | Match completed (3 players) | 1. Have players cast votes for non-imposter players or tie. | App announces **Imposter Victory** and reveals the Imposter. | Pending |
+| **TC-VOTE-01** | Voting Logic | Team Win condition (Majority vote) | Match completed (3 players) | 1. Have 2 or more players vote for the correct Imposter ID or tie. | App announces **Team Victory** and displays vote breakdown. | pass |
+| **TC-VOTE-02** | Voting Logic | Imposter Win condition (Majority fail) | Match completed (3 players) | 1. Have players cast votes for non-imposter players . | App announces **Imposter Victory** and reveals the Imposter. | pass |
 
 ---
 
@@ -37,7 +37,7 @@ This document outlines the manual End-to-End (E2E) and User Acceptance Testing (
 
 | Test ID | Feature Area | Test Scenario | Pre-conditions | Steps to Execute | Expected Result | Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TC-SCORE-01** | Scoring Rules | Team Win point allocation | Voting finished (Team Won) | 1. Check score screen after Team victory. | Players who voted correctly get **+1 point**. Imposter gets **0 points**. | Pending |
-| **TC-SCORE-02** | Scoring Rules | Imposter Win point allocation | Voting finished (Imposter Won) | 1. Check score screen after Imposter victory. | Imposter gets **+2 points**. Team members get **0 points**. | Pending |
-| **TC-SCORE-03** | Reset & Edit | Edit players preserving total scores | Round 1 finished | 1. Click "Edit Players".<br>2. Select "Keep Scores".<br>3. Add a 4th new player.<br>4. Start Round 2. | Existing players retain total scores; new player starts at **0 points**. | Pending |
-| **TC-SCORE-04** | Reset & Edit | Reset all scores for new game | Round 1 finished | 1. Click "Edit Players".<br>2. Select "Reset All Scores".<br>3. Start new game. | All player total and session scores reset to **0**. | Pending |
+| **TC-SCORE-01** | Scoring Rules | Team Win point allocation | Voting finished (Team Won) | 1. Check score screen after Team victory. | Players who voted correctly get **+1 point**. Imposter gets **0 points**. | pass |
+| **TC-SCORE-02** | Scoring Rules | Imposter Win point allocation | Voting finished (Imposter Won) | 1. Check score screen after Imposter victory. | Imposter gets **+2 points**. Team members get **0 points** who voted incorrectly, and those who voted correctly get **1 points** . | pass |
+| **TC-SCORE-03** | Reset & Edit | Edit players preserving total scores | Round 1 finished | 1. Click "Edit Players".<br>2. Select "Keep Scores".<br>3. Add a 4th new player.<br>4. Start Round 2. | Existing players retain total scores; new player starts at **0 points**. | pass |
+| **TC-SCORE-04** | Reset & Edit | Reset all scores for new game | Round 1 finished | 1. Click "Edit Players".<br>2. Select "Reset All Scores".<br>3. Start new game. | All player total and session scores reset to **0**. | pass |
