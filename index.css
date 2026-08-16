@@ -346,7 +346,7 @@ body{
   color: var(--primary);
 }
 
-//* Checkbox container for "Edit Players" mode */
+/* Checkbox container for "Edit Players" mode */
 .keep-scores-container {
   background-color: var(--bg);
   border: 1px solid var(--border);

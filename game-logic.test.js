@@ -1,4 +1,4 @@
-const { Player, wordManager, GameLogic } = require('./game logic and data.js');
+const { Player, wordManager, GameLogic } = require('./game-logic-and-data.js');
 
 describe('Player Class Tests', () => {
   test('creates player with trimmed name and zero initial scores', () => {
