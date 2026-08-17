@@ -1654,3 +1654,40 @@ body{
 .btn-new-session:active {
   transform: scale(0.98);
 }
+/* Fullscreen black screen overlay */
+#app-preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#app-preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Spinner styling */
+.loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin-loader 0.8s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin-loader {
+    to { transform: rotate(360deg); }
+}

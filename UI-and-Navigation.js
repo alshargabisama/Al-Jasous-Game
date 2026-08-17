@@ -537,3 +537,13 @@ ensureKeepScoresCheckbox() {
 document.addEventListener("DOMContentLoaded", () => {
   UI.initEventListeners();
 });
+
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('app-preloader');
+    if (preloader) {
+        preloader.classList.add('fade-out');
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 300);
+    }
+});
