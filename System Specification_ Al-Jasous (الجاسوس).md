@@ -58,7 +58,7 @@
 
 ## 
 
-└───────────────────────────────────────────────────**6\. System Architecture & Implementation Strategy**
+**6\. System Architecture & Implementation Strategy**
 
 ### **6.1 Page Navigation Strategy (Single-Page View Management)**
 
@@ -76,7 +76,7 @@ The project structure separates, user interface rendering, and game logic data m
 * **DOM Rendering (**ui and navigation.js **/ DOM handlers):** Reads state and updates element contents, view visibilities, and input lists.  
 *   
 * **Game Logic (**game logic and data.js**):** Contains pure, testable functions for word selection without repetition, role assignment, and point evaluation and Holds runtime variables (players, scores, imposterIndex, currentWord, usedWords).  
-* 
+  
 
 ### **6.3 Design System & Visual Styling**
 
@@ -85,9 +85,8 @@ The project structure separates, user interface rendering, and game logic data m
 * **Typography:** Modern IBM Plex Sans Arabic  
     
 * **UI Scaffolding:** CSS Flexbox and Grid layouts using CSS Custom Properties (\--bg-color, \--primary, \--spacing-md) for quick styling updates.  
-*   
-  
 
+  
 
 ## **7\. Quality Assurance & Testing Strategy**
 
