@@ -474,6 +474,7 @@ body{
   min-height: 0;
   max-height: clamp(200px, 45vh, 380px);
   overflow-y: auto;
+  overflow-x: hidden; /* Prevents horizontal scrolling inside the list */
   padding: 4px;
 }
 
@@ -481,13 +482,16 @@ body{
 .player-input-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-xs);
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  padding: 0.4rem 0.8rem; /* Balanced horizontal padding */
+  padding: 0.4rem 0.8rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Restricts internal elements inside rounded pill */
 }
 
 /* Focus glow effect when typing */
@@ -497,7 +501,8 @@ body{
 }
 
 .player-name-input {
-  flex: 1; /* Takes up all available horizontal space */
+  flex: 1;
+  min-width: 0; /* Ensures input shrinks properly on smaller screens */
   background: transparent;
   border: none;
   outline: none;
@@ -518,6 +523,7 @@ body{
   color: var(--text-muted);
   width: 36px;
   height: 36px;
+  flex-shrink: 0; /* Keeps trash button at exact width without shrinking or pushing out */
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
