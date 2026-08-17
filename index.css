@@ -16,12 +16,23 @@ body{
     padding: var(--space-sm);
     line-height: 1.6; 
 } 
+.leaderboard-list,
+.result-content,
+.voting-grid {
+  flex: 1;
+  min-height: 0;
+  max-height: clamp(220px, 50vh, 420px);
+  overflow-y: auto;
+  width: 100%;
+  padding: 4px;
+}
 /* home screen css */ 
-
+/* home screen css */ 
 .screen {
   width: 100%;
   max-width: 420px;
-  min-height: 90vh;
+  min-height: min(650px, 90vh);
+  max-height: calc(100vh - 2 * var(--space-sm));
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -32,7 +43,26 @@ body{
   align-items: center;
   text-align: center;
   justify-content: space-between;
-} 
+  box-sizing: border-box;
+}
+
+#pass-phone-screen,
+#reveal-screen,
+#round-initialization-screen,
+#voting-initialization-screen,
+#clue-turn-screen,
+#voting-screen,
+#result-screen,
+#leaderboard-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+  max-height: calc(100vh - 2 * var(--space-sm));
+  padding: var(--space-sm);
+  box-sizing: border-box;
+}
 
 .game-logo {
   width: 140px;
@@ -84,13 +114,14 @@ body{
 /* ==========================================
    BUTTONS
    ========================================== */
+
 .home-buttons {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
   margin-top: auto;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .btn {
@@ -134,8 +165,11 @@ body{
   font-size: var(--fs-small);
   color: var(--text-muted);
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: var(--space-xs);
   opacity: 0.7;
+  width: 100%;
 }
 
 .My-name {
@@ -426,18 +460,21 @@ body{
 .players-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
   flex: 1;
   justify-content: space-between;
+  width: 100%;
+  min-height: 0; /* Prevents overflow issues in flex containers */
 }
 
 .players-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  max-height: 45vh; /* Makes the list scrollable if player count is high */
+  flex: 1;
+  min-height: 0;
+  max-height: clamp(200px, 45vh, 380px);
   overflow-y: auto;
-  padding-left: 4px;
+  padding: 4px;
 }
 
 /* Single Input Row: Horizontal Layout */
@@ -448,8 +485,9 @@ body{
   background-color: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
-  padding: 0.4rem 0.4rem 0.4rem 1rem; /* Extra padding on right for input */
+  padding: 0.4rem 0.8rem; /* Balanced horizontal padding */
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
 }
 
 /* Focus glow effect when typing */
@@ -502,7 +540,9 @@ body{
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
+  width: 100%;
   margin-top: auto;
+  padding-top: var(--space-xs);
 }
 
 /* ==========================================
@@ -1203,16 +1243,18 @@ body{
 /* Glass Main Card Container */
 .result-card {
   width: 100%;
+  max-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-lg) var(--space-md);
+  padding: var(--space-md);
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, rgba(23, 25, 32, 0.95) 0%, rgba(13, 14, 18, 0.98) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(12px);
   text-align: center;
+  overflow: hidden;
 }
 
 /* Winner Status Badge */
@@ -1286,7 +1328,19 @@ body{
 /* Score Table Styling */
 .score-table-container {
   width: 100%;
-  margin-bottom: var(--space-lg);
+  max-height: clamp(180px, 35vh, 280px);
+  overflow-y: auto;
+  margin-bottom: var(--space-md);
+  padding-right: 4px;
+}
+
+/* Custom Scrollbar for Results Table */
+.score-table-container::-webkit-scrollbar {
+  width: 4px;
+}
+.score-table-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
 }
 
 .table-title {
@@ -1442,15 +1496,17 @@ body{
 /* Glass Main Card Container */
 .leaderboard-card {
   width: 100%;
+  max-height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-lg) var(--space-md) var(--space-md);
+  padding: var(--space-md);
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, rgba(23, 25, 32, 0.95) 0%, rgba(13, 14, 18, 0.98) 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
 /* Top 3 Podium Layout */
