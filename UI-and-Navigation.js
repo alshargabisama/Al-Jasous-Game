@@ -522,6 +522,7 @@ ensureKeepScoresCheckbox() {
       });
     }
 
+   // Leaderboard Actions
     if (this.leaderboard.newGameBtn) {
       this.leaderboard.newGameBtn.addEventListener("click", () => {
         if (window.GameLogic && typeof window.GameLogic.resetToNewGame === "function") {
